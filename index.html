@@ -26,23 +26,33 @@ if (location.protocol.substr(0, 4) === "file") {
 
 // === ✅ LIFF 初始化流程 ===
 (async () => {
-    const LIFF_ID = "1657147144-GZxbw6E0";  // ← 這是你的實際 LIFF ID
+    const LIFF_ID = "1657147144-GZxbw6E0"; // ← 你的 LIFF ID
+    window.liffReady = false;  // 提供 Construct 3 檢查用旗標
 
     try {
         console.log("🔄 初始化 LIFF...");
         await liff.init({ liffId: LIFF_ID });
-        console.log("✅ LIFF 初始化完成");
+        await liff.ready; // 等待 LIFF 完成內部初始化
+        console.log("✅ LIFF 初始化完成，版本：", liff.getVersion());
+        window.liffReady = true;
 
-        // 取得使用者資料
+        // 🔍 檢查 storage 功能
+        if (!liff.storage) {
+            alert("⚠️ 您的 LINE 環境暫不支援 liff.storage，請確認使用 LINE App 開啟或更新版本。");
+        } else {
+            console.log("✅ liff.storage 可用");
+        }
+
+        // ✅ 取得使用者資料
         const profile = await liff.getProfile();
         const lineName = profile.displayName || profile.userId;
         console.log("👤 LINE 使用者：", lineName);
 
-        // 儲存至 localStorage
+        // ✅ 儲存至 localStorage（給 C3 使用）
         localStorage.setItem("line_name", lineName);
         console.log("💾 已儲存 line_name =", lineName);
 
-        // === ✅ 一切完成後再啟動 Construct 3 遊戲 ===
+        // === ✅ 初始化完成後再啟動 Construct 3 ===
         console.log("🚀 啟動 Construct 3 遊戲");
         const scripts = [
             "scripts/modernjscheck.js",
@@ -60,7 +70,7 @@ if (location.protocol.substr(0, 4) === "file") {
 
     } catch (err) {
         console.error("❌ LIFF 初始化失敗：", err);
-        alert("初始化 LIFF 失敗，請確認您是否在 LINE App 內開啟並且 LIFF ID 正確。");
+        alert("初始化 LIFF 失敗。\n請確認：\n1️⃣ LIFF ID 是否正確\n2️⃣ 是否在 LINE App 內開啟\n3️⃣ LINE 版本已更新");
     }
 })();
 </script>
@@ -71,6 +81,5 @@ if (location.protocol.substr(0, 4) === "file") {
         <p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
     </div>
 </noscript>
-
 </body>
 </html>
