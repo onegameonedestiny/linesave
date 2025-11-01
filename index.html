@@ -2,10 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>LINE儲存1</title>
+    <title>LINE儲存</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-
-    <!-- Made with Construct -->
     <meta name="generator" content="Scirra Construct">
 
     <link rel="manifest" href="appmanifest.json">
@@ -15,45 +13,53 @@
     <link rel="icon" type="image/png" href="icons/icon-512.png">
     <link rel="stylesheet" href="style.css">
 
-    <!-- ✅ 載入 LIFF SDK -->
+    <!-- ✅ 載入最新 LIFF SDK -->
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
 <script>
 if (location.protocol.substr(0, 4) === "file") {
-    alert("Web exports won't work until you upload them. (When running on the file: protocol, browsers block many features from working for security reasons.)");
+    alert("⚠️ 必須上傳至伺服器後執行，file:// 模式不支援。");
 }
 
 // === ✅ LIFF 初始化流程 ===
 (async () => {
-    const LIFF_ID = "1657147144-PLBgokM8"; // ← 你的 LIFF ID
-    window.liffReady = false;  // 提供 Construct 3 檢查用旗標
+    const LIFF_ID = "1657147144-PLBgokM8";  // ← 你目前的新 LIFF ID
+    window.liffReady = false;
 
     try {
         console.log("🔄 初始化 LIFF...");
         await liff.init({ liffId: LIFF_ID });
-        await liff.ready; // 等待 LIFF 完成內部初始化
+        await liff.ready;
+
         console.log("✅ LIFF 初始化完成，版本：", liff.getVersion());
+        console.log("🧩 是否在 LINE 內開啟：", liff.isInClient());
         window.liffReady = true;
 
-        // 🔍 檢查 storage 功能
-        if (!liff.storage) {
-            alert("⚠️ 您的 LINE 環境暫不支援 liff.storage，請確認使用 LINE App 開啟或更新版本。");
+        // 🧠 檢查環境支援狀態
+        if (!liff.isInClient()) {
+            alert("⚠️ 請使用 LINE App 開啟此遊戲網址，否則雲端儲存功能將無法使用。");
+        } else if (!liff.storage) {
+            alert("⚠️ 您的 LINE 環境暫不支援 liff.storage，請更新 LINE App 後再試。");
         } else {
-            console.log("✅ liff.storage 可用");
+            console.log("✅ liff.storage 功能可用。");
         }
 
-        // ✅ 取得使用者資料
+        // 👤 取得使用者資料
         const profile = await liff.getProfile();
         const lineName = profile.displayName || profile.userId;
-        console.log("👤 LINE 使用者：", lineName);
-
-        // ✅ 儲存至 localStorage（給 C3 使用）
         localStorage.setItem("line_name", lineName);
-        console.log("💾 已儲存 line_name =", lineName);
+        console.log("💾 已儲存使用者名稱：", lineName);
 
-        // === ✅ 初始化完成後再啟動 Construct 3 ===
-        console.log("🚀 啟動 Construct 3 遊戲");
+        // 🧾 顯示 debug 狀態
+        alert(
+          "版本：" + liff.getVersion() +
+          "\nLINE 內開啟：" + liff.isInClient() +
+          "\nstorage：" + (liff.storage ? "✅可用" : "❌不可用") +
+          "\n使用者：" + lineName
+        );
+
+        // 🚀 初始化完成後再載入 Construct 3 遊戲腳本
         const scripts = [
             "scripts/modernjscheck.js",
             "scripts/supportcheck.js",
@@ -70,18 +76,16 @@ if (location.protocol.substr(0, 4) === "file") {
 
     } catch (err) {
         console.error("❌ LIFF 初始化失敗：", err);
-        alert("初始化 LIFF 失敗。\n請確認：\n1️⃣ LIFF ID 是否正確\n2️⃣ 是否在 LINE App 內開啟\n3️⃣ LINE 版本已更新");
+        alert("初始化 LIFF 失敗：\n" + err.message + "\n請確認：\n1️⃣ LIFF ID 正確\n2️⃣ 在 LINE App 內開啟\n3️⃣ LINE 已更新");
     }
 })();
 </script>
 
 <noscript>
     <div id="notSupportedWrap">
-        <h2 id="notSupportedTitle">This content requires JavaScript</h2>
-        <p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
+        <h2>本內容需要 JavaScript</h2>
+        <p>請開啟 JavaScript 以使用。</p>
     </div>
 </noscript>
 </body>
 </html>
-
-
