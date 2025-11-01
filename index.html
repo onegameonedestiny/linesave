@@ -2,75 +2,48 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>LINE儲存</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	<title>LINE儲存</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	
+	<!-- Made with Construct, the game and app creator :: https://www.construct.net -->
+	<meta name="generator" content="Scirra Construct">
 
-    <!-- Made with Construct -->
-    <meta name="generator" content="Scirra Construct">
 
-    <link rel="manifest" href="appmanifest.json">
-    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
-    <link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256.png">
-    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
-    <link rel="icon" type="image/png" href="icons/icon-512.png">
-    <link rel="stylesheet" href="style.css">
 
-    <!-- ✅ 載入 LIFF SDK -->
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-</head>
+	<link rel="manifest" href="appmanifest.json">
+	<link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
+	<link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256.png">
+	<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+	<link rel="icon" type="image/png" href="icons/icon-512.png">
+
+	<link rel="stylesheet" href="style.css">
+
+
+
+</head> 
+ 
 <body>
+
+	
+
 <script>
-if (location.protocol.substr(0, 4) === "file") {
-    alert("Web exports won't work until you upload them. (When running on the file: protocol, browsers block many features from working for security reasons.)");
+if (location.protocol.substr(0, 4) === "file")
+{
+	alert("Web exports won't work until you upload them. (When running on the file: protocol, browsers block many features from working for security reasons.)");
 }
-
-// === ✅ LIFF 初始化流程 ===
-(async () => {
-    const LIFF_ID = "1657147144-GZxbw6E0";  // ← 這是你的實際 LIFF ID
-
-    try {
-        console.log("🔄 初始化 LIFF...");
-        await liff.init({ liffId: LIFF_ID });
-        console.log("✅ LIFF 初始化完成");
-
-        // 取得使用者資料
-        const profile = await liff.getProfile();
-        const lineName = profile.displayName || profile.userId;
-        console.log("👤 LINE 使用者：", lineName);
-
-        // 儲存至 localStorage
-        localStorage.setItem("line_name", lineName);
-        console.log("💾 已儲存 line_name =", lineName);
-
-        // === ✅ 一切完成後再啟動 Construct 3 遊戲 ===
-        console.log("🚀 啟動 Construct 3 遊戲");
-        const scripts = [
-            "scripts/modernjscheck.js",
-            "scripts/supportcheck.js",
-            "scripts/offlineclient.js",
-            "scripts/main.js",
-            "scripts/register-sw.js"
-        ];
-        for (const src of scripts) {
-            const s = document.createElement("script");
-            s.src = src;
-            if (src.endsWith(".js")) s.type = "module";
-            document.body.appendChild(s);
-        }
-
-    } catch (err) {
-        console.error("❌ LIFF 初始化失敗：", err);
-        alert("初始化 LIFF 失敗，請確認您是否在 LINE App 內開啟並且 LIFF ID 正確。");
-    }
-})();
 </script>
+	
+	<noscript>
+		<div id="notSupportedWrap">
+			<h2 id="notSupportedTitle">This content requires JavaScript</h2>
+			<p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
+		</div>
+	</noscript>
+	<script src="scripts/modernjscheck.js"></script>
+	<script src="scripts/supportcheck.js"></script>
+	<script src="scripts/offlineclient.js" type="module"></script>
+	<script src="scripts/main.js" type="module"></script>
+	<script src="scripts/register-sw.js" type="module"></script>
 
-<noscript>
-    <div id="notSupportedWrap">
-        <h2 id="notSupportedTitle">This content requires JavaScript</h2>
-        <p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
-    </div>
-</noscript>
-
-</body>
+</body> 
 </html>
